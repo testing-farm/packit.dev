@@ -160,6 +160,45 @@ The meaning of individual attributes is as follows:
 * Prepare — specifies which ansible playbook should be applied to prepare environment for testing.
 * Execute — defines that the beakerlib framework should be used for running the tests.
 
+### FMF Tests
+
+Here's a real-life example of tests enabled for the [fmf][fmf] package.
+There are several testsets defined under the [testsets](https://github.com/psss/fmf/tree/master/testsets) directory.
+The `smoke` testset enables a super basic test checking availability of the `fmf` command:
+
+	summary:
+		Just a basic smoke test
+	execute:
+		how: shell
+		commands:
+			- fmf --help
+
+Testset `features` is used to execute all available beakerlib tests from the `fmf` repository:
+
+	summary:
+		Essential command line features
+	discover:
+		how: fmf
+		repository: https://github.com/psss/fmf
+	execute:
+		how: beakerlib
+
+It is also possible to select only a subset of available tests.
+This is demonstrated by the `docs` testset.
+Use an fmf `filter` like `tier:1` to select tests for execution.
+You can also reference a specific feature area instead:
+
+	summary:
+		Ensure that documentation is present
+	discover:
+		how: fmf
+		repository: https://github.com/psss/fmf
+		filter: coverage:/stories/docs.*
+	execute:
+		how: beakerlib
+
+See the [stories](https://github.com/psss/fmf/tree/master/stories) directory to get some inspiration for organizing stories and requirements.
+
 ## Issues & RFEs
 
 If you have found an issue or have an RFE, please use Packit Service's Github issue tracker to [file an issue][issues].
